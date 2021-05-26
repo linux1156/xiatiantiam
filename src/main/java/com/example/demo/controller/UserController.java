@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.entity.Hello;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ class UserController {
     Logger log = LoggerFactory.getLogger(getClass());
 
     private User user;
-    private Hello hello;
     @Autowired
     private UserService userService;
 
