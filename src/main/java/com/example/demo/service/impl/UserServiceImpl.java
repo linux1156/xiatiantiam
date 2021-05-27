@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.entity.User;
 import com.example.demo.dao.db.UserMapper;
+import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import com.example.demo.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
 
     @Override
@@ -35,6 +40,7 @@ public class UserServiceImpl implements UserService{
             return jsonObject;
         }
         User userById;
+        userById =
         userById = userMapper.userById(id);
         jsonObject.put("code", 0);
         data.put("id", userById.getId());
@@ -51,8 +57,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public JSONObject insertUser(User user){
+        int ttl = 24*60*60;
+        int myId;
         try{
+            //TODO(加数据库锁)
             userMapper.insertUser(user.getUserName(),user.getAge(), user.getNickName(), user.getFemale(), user.getAdult());
+            myId = userMapper.selectLastId();
+            user.setId(myId);
+            redisUtil.set("user:info:"+myId, JSON.toJSON(user), ttl);
         }catch (Exception e){
             log.info(e.toString());
             jsonObject.put("code", -500);

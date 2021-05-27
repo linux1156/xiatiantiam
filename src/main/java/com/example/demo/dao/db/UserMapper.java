@@ -18,4 +18,7 @@ public interface UserMapper{
 
     @Insert("insert into test_user(username, age, nickname, female, adult) values(#{username}, #{age}, #{nickname}, #{female}, #{adult})")
     int insertUser(@Param("username")String userName, @Param("age")int age, @Param("nickname")String nickName, @Param("female")int female, @Param("adult")int adult);
+
+    @Select("select id from test_user order by id desc limit 1")
+    int selectLastId();
 }

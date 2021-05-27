@@ -7,9 +7,9 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication()
 @MapperScan("com.example.demo.dao.db")
-@ComponentScan({"com.example.demo.controller","com.example.demo.service","com.example.demo.service.impl", "com.example.demo.dao"})
+@ComponentScan({"com.example.demo.controller","com.example.demo.service","com.example.demo.service.impl", "com.example.demo.dao.db", "com.example.demo.util","com.example.demo.config"})
 @EnableScheduling
 @EnableCaching
 public class DemoApplication {
