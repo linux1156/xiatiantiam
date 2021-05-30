@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface UserMapper{
+
     @Select("select * from test_user limit 1")
     User allUser();
 

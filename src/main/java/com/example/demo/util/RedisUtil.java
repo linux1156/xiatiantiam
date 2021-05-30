@@ -1,6 +1,8 @@
 package com.example.demo.util;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
     @Autowired(required=true)
     private RedisTemplate<String, Object> redisTemplate;
+
+    Logger log = LoggerFactory.getLogger(getClass());
 
     public RedisUtil(RedisTemplate<String, Object>redisTemplate){
         this.redisTemplate = redisTemplate;
@@ -85,7 +89,14 @@ public class RedisUtil {
      * @return 值
      */
     public Object get(String key){
-        return key==null?null:redisTemplate.opsForValue().get(key);
+        if (key != null) {
+            log.info("redis start:"+System.currentTimeMillis());
+            Object ob = redisTemplate.opsForValue().get(key);
+            log.info("ob:"+ob.toString());
+            log.info("redis end:"+System.currentTimeMillis());
+            return redisTemplate.opsForValue().get(key);
+        }
+        return null;
     }
 
     /**

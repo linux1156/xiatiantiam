@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dao.db.UserMapper;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import com.example.demo.util.JedisUtil;
 import com.example.demo.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private JedisUtil jedisUtil;
 
 
     @Override
@@ -64,7 +67,30 @@ public class UserServiceImpl implements UserService{
             userMapper.insertUser(user.getUserName(),user.getAge(), user.getNickName(), user.getFemale(), user.getAdult());
             myId = userMapper.selectLastId();
             user.setId(myId);
-            redisUtil.set("user:info:"+myId, JSON.toJSON(user), ttl);
+            redisUtil.hset("user:"+myId, "id", myId, ttl);
+            redisUtil.hset("user:"+myId, "userName", user.getUserName(), ttl);
+            redisUtil.hset("user:"+myId, "nickName", user.getNickName(), ttl);
+
+            jedisUtil.set("user_"+myId, user.getUserName(), 1, ttl);
+
+            long timeFlag = 0;
+            int count = 0;
+            long startTime =  System.currentTimeMillis();
+            while(timeFlag<10000){
+                jedisUtil.get("user_"+myId, 1);
+                count++;
+                timeFlag = System.currentTimeMillis() - startTime;
+            }
+            log.info("redis:"+count);
+            count = 0;
+            timeFlag = 0;
+            startTime =  System.currentTimeMillis();
+            while(timeFlag<10000){
+                userMapper.selectLastId();
+                count++;
+                timeFlag = System.currentTimeMillis() - startTime;
+            }
+            log.info("db:"+count);
         }catch (Exception e){
             log.info(e.toString());
             jsonObject.put("code", -500);
