@@ -25,16 +25,28 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       acks: 1
+      properties:
+        linger:
+          ms: 0
     consumer:
       bootstrap-servers: localhost:9092
-      enable-auto-commit: false
-      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-offset-reset: latest
       auto-commit-interval: 100
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        group:
+          id: defaultConsumerGroup
+        session:
+          timeout:
+            ms: 120000
+        request:
+          timeout:
+            ms: 180000
+      heartbeat-interval: 1000
     listener:
       concurrency: 5
-      ack-mode: manual_immediate
       missing-topics-fatal: false
 server:
   port: 8081
