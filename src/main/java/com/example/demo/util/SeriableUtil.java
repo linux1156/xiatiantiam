@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class FuncUtil {
+public class SeriableUtil {
 
     /**
      * 序列化对象

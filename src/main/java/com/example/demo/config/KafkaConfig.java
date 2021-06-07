@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:application.yml")
-public class KafkaInitialConfiguration {
+public class KafkaConfig {
     @Bean
     public NewTopic initialTopic(){
         return new NewTopic("testtopic", 8, (short) 1);
