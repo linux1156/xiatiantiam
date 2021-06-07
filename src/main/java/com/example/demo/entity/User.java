@@ -4,11 +4,10 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Table(catalog = "test_user")
 @Data
-public class User implements Serializable {
+public class User  {
     @Column(name="username")
     private String userName;
 

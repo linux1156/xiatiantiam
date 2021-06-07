@@ -16,6 +16,26 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 1200
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      retries: 0
+      batch-size: 4096
+      buffer-memory: 40960
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: 1
+    consumer:
+      bootstrap-servers: localhost:9092
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      concurrency: 5
+      ack-mode: manual_immediate
+      missing-topics-fatal: false
 server:
   port: 8081
 
