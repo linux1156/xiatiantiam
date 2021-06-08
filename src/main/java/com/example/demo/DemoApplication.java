@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication()
 @MapperScan("com.example.demo.dao.db")
-@ComponentScan({"com.example.demo.controller","com.example.demo.service","com.example.demo.service.impl", "com.example.demo.dao.db", "com.example.demo.util","com.example.demo.config"})
+@ComponentScan({"com.example.demo.controller","com.example.demo.service","com.example.demo.service.impl", "com.example.demo.dao", "com.example.demo.util","com.example.demo.config","com.example.demo.kafka"})
 @EnableScheduling
 @EnableCaching
 public class DemoApplication {

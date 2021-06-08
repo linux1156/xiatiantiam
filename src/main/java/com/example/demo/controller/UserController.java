@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.User;
+import com.example.demo.kafka.KafkaProducer;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ class UserController {
     private User user;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @RequestMapping(value = "/say", method = RequestMethod.GET)
     public JSONObject sayHello() {
@@ -31,8 +35,11 @@ class UserController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public JSONObject userByUserId(@PathVariable("id") int id){
-        return userService.userById(id);
+    public String userByUserId(@PathVariable("id") int id){
+        JSONObject jsonObject = null;
+        jsonObject = userService.userById(id);
+        kafkaProducer.send(jsonObject);
+        return "ok";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -48,6 +55,7 @@ class UserController {
         user.setAdult(adult);
         return userService.insertUser(user);
     }
+
 
 
 
